@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+Task 2 – Tuần 2: React Hook Form + Zod
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Form đăng ký tài khoản sử dụng React Hook Form để quản lý form state và Zod để validate. Giao diện đã tối ưu UX: canh giữa, dark/light tự động, focus ring, thông báo lỗi từng field.
 
-Currently, two official plugins are available:
+🧰 Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React + Vite + TypeScript
 
-## React Compiler
+react-hook-form, @hookform/resolvers, zod
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+CSS thuần (responsive, dark/light)
 
-## Expanding the ESLint configuration
+✨ Tính năng chính
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Form fields: fullName, email, password, confirmPassword, age, gender, agree.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Validate bằng Zod + hiển thị lỗi theo field.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Kiểm tra mật khẩu khớp (password vs confirm).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+UI sạch, tập trung vào nhập liệu, hỗ trợ bàn phím.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+✅ Luật validate (Zod)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+fullName: tối thiểu 2 ký tự
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+email: đúng định dạng email
+
+password: tối thiểu 6 ký tự
+
+confirmPassword: phải trùng password
+
+age: chọn 1 trong 18-24 | 25-34 | 35-44 | 45+
+
+gender: chọn 1 trong male | female | other
+
+agree: bắt buộc tích đồng ý
+
+📂 Cấu trúc thư mục
+src/
+├─ components/
+│  └─ FormInput.tsx        # (optional, nếu dùng component input tái sử dụng)
+├─ pages/
+│  └─ SignUp.tsx           # trang form + logic RHF + Zod
+├─ App.tsx
+├─ App.css                 # style form (wrapper/card/grid/errors/btn)
+└─ main.tsx
+
+🚀 Chạy dự án
+npm i
+npm run dev
+
+
+Mở trình duyệt tại: http://localhost:5173
+
+🏗️ Build
+npm run build
+npm run preview
+
+🔗 Liên kết
+
+GitHub: https://github.com/
+<your-username>/task2-tuan2
+
+(Tuỳ chọn) Vercel: https://task2-tuan2.vercel.app
+
+Thay <your-username> và link Vercel thực tế của bạn.
+
+🧪 Cách test nhanh
+
+Bấm Create account khi form trống → phải hiện lỗi ở từng field.
+
+Nhập email sai (vd: abc@) → báo lỗi email.
+
+Nhập 2 mật khẩu không khớp → báo “Mật khẩu không khớp”.
+
+Không tích “I agree to terms” → không cho submit.
+
+🛠️ Scripts hữu ích
+# format/lint (nếu có cài)
+npm run lint
+npm run format
+
+🧯 Troubleshooting
+
+CSS không áp dụng → kiểm tra đã import "./App.css" trong App.tsx.
+
+TypeScript error với SubmitHandler / resolver
+
+import type: import type { SubmitHandler } from "react-hook-form";
+
+dùng generic: useForm<FormValues>({...})
+
+nếu dùng z.preprocess, set type FormValues = z.input<typeof schema> và defaultValues cho age, gender là "".
